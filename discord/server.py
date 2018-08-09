@@ -203,7 +203,12 @@ class Server(Hashable):
         self.features = guild.get('features', [])
         self.splash = guild.get('splash')
 
+        self.owner_id = guild.get('owner_id', None)
+
         for mdata in guild.get('members', []):
+            # MODIFICATION: Only care about the owner of the guild, not about the normal members.
+            if mdata.get('id') != self.owner_id:
+                continue
             roles = [self.default_role]
             for role_id in mdata['roles']:
                 role = utils.find(lambda r: r.id == role_id, self.roles)
@@ -215,12 +220,11 @@ class Server(Hashable):
             member.server = self
             self._add_member(member)
 
+        if 'owner_id' in guild:
+            self.owner = self.get_member(self.owner_id)
+
         self._sync(guild)
         self.large = None if member_count is None else self._member_count >= 250
-
-        if 'owner_id' in guild:
-            self.owner_id = guild['owner_id']
-            self.owner = self.get_member(self.owner_id)
 
         afk_id = guild.get('afk_channel_id')
         self.afk_channel = self.get_channel(afk_id)

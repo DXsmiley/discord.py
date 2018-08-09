@@ -326,6 +326,8 @@ class ConnectionState:
                 return
 
             member = self._make_member(server, data)
+            if not member:
+                return
             server._add_member(member)
 
         old_member = member._copy()
@@ -404,19 +406,22 @@ class ConnectionState:
             self.dispatch('group_remove', channel, user)
 
     def _make_member(self, server, data):
+        # MODIFICATION: Only care about the owner of the server
+        if data.get('id') != server.owner_id:
+            return None
         roles = [server.default_role]
         for roleid in data.get('roles', []):
             role = utils.get(server.roles, id=roleid)
             if role is not None:
                 roles.append(role)
-
         data['roles'] = sorted(roles)
         return Member(server=server, **data)
 
     def parse_guild_member_add(self, data):
         server = self._get_server(data.get('guild_id'))
         member = self._make_member(server, data)
-        server._add_member(member)
+        if member:
+            server._add_member(member)
         server._member_count += 1
         self.dispatch('member_join', member)
 
@@ -621,9 +626,10 @@ class ConnectionState:
         members = data.get('members', [])
         for member in members:
             m = self._make_member(server, member)
-            existing = server.get_member(m.id)
-            if existing is None or existing.joined_at is None:
-                server._add_member(m)
+            if m:
+                existing = server.get_member(m.id)
+                if existing is None or existing.joined_at is None:
+                    server._add_member(m)
 
         # if the owner is offline, server.owner is potentially None
         # therefore we should check if this chunk makes it point to a valid

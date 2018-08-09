@@ -74,7 +74,7 @@ def flatten_voice_states(cls):
         setattr(cls, attr, property(getter))
     return cls
 
-@flatten_voice_states
+# @flatten_voice_states
 class Member(User):
     """Represents a Discord member to a :class:`Server`.
 
@@ -103,11 +103,11 @@ class Member(User):
         The server specific nickname of the user.
     """
 
-    __slots__ = [ 'roles', 'joined_at', 'status', 'game', 'server', 'nick', 'voice' ]
+    __slots__ = [ 'roles', 'joined_at', 'status', 'game', 'server', 'nick' ] # removed voice
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs.get('user'))
-        self.voice = VoiceState(**kwargs)
+        # self.voice = VoiceState(**kwargs) # MODIFICATION: disabled because I don't use it
         self.joined_at = utils.parse_time(kwargs.get('joined_at'))
         self.roles = kwargs.get('roles', [])
         self.status = Status.offline
@@ -117,6 +117,7 @@ class Member(User):
         self.nick = kwargs.get('nick', None)
 
     def _update_voice_state(self, **kwargs):
+        return # Don't do any voice stuff
         self.voice.self_mute = kwargs.get('self_mute', False)
         self.voice.self_deaf = kwargs.get('self_deaf', False)
         self.voice.is_afk = kwargs.get('suppress', False)
@@ -143,7 +144,7 @@ class Member(User):
 
     def _copy(self):
         ret = copy.copy(self)
-        ret.voice = copy.copy(self.voice)
+        # ret.voice = copy.copy(self.voice)
         return ret
 
     @property

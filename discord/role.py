@@ -78,7 +78,7 @@ class Role(Hashable):
         Indicates if the role can be mentioned by users.
     """
 
-    __slots__ = ['id', 'name', 'permissions', 'color', 'colour', 'position',
+    __slots__ = ['id', 'name', 'permissions', 'position',
                  'managed', 'mentionable', 'hoist', 'server' ]
 
     def __init__(self, **kwargs):
@@ -123,11 +123,11 @@ class Role(Hashable):
         self.name = kwargs.get('name')
         self.permissions = Permissions(kwargs.get('permissions', 0))
         self.position = kwargs.get('position', 0)
-        self.colour = Colour(kwargs.get('color', 0))
+        # self.colour = Colour(kwargs.get('color', 0)) # MODIFICATION don't need colour information
         self.hoist = kwargs.get('hoist', False)
         self.managed = kwargs.get('managed', False)
         self.mentionable = kwargs.get('mentionable', False)
-        self.color = self.colour
+        # self.color = self.colour
 
     @property
     def is_everyone(self):

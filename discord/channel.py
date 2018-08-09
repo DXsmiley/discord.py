@@ -112,6 +112,11 @@ class Channel(Hashable):
         everyone_id = self.server.id
 
         for index, overridden in enumerate(kwargs.get('permission_overwrites', [])):
+            continue
+            # TODO
+            # Do we really care about permission overwrites?
+            # Sometimes we might, but other times (such as if it's voice perms or something, we wont')
+            # might want some janky global setup stuff to drop irrelevent information.
             overridden_id = overridden['id']
             self._permission_overwrites.append(Overwrites(**overridden))
 
