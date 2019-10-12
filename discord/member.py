@@ -161,20 +161,30 @@ class Member(discord.abc.Messageable, _BaseUser):
         Nitro boost on the guild, if available. This could be ``None``.
     """
 
-    __slots__ = ('_roles', 'joined_at', 'premium_since', '_client_status', 'activities', 'guild', 'nick', '_user', '_state')
+    __slots__ = (
+        '_roles',
+        # 'joined_at',
+        # 'premium_since',
+        '_client_status',
+        # 'activities',
+        'guild',
+        # 'nick',
+        '_user',
+        '_state'
+    )
 
     def __init__(self, *, data, guild, state):
         self._state = state
         self._user = state.store_user(data['user'])
         self.guild = guild
-        self.joined_at = utils.parse_time(data.get('joined_at'))
-        self.premium_since = utils.parse_time(data.get('premium_since'))
+        # self.joined_at = utils.parse_time(data.get('joined_at'))
+        # self.premium_since = utils.parse_time(data.get('premium_since'))
         self._update_roles(data)
         self._client_status = {
             None: 'offline'
         }
-        self.activities = tuple(map(create_activity, data.get('activities', [])))
-        self.nick = data.get('nick', None)
+        # self.activities = tuple(map(create_activity, data.get('activities', [])))
+        # self.nick = data.get('nick', None)
 
     def __str__(self):
         return str(self._user)
@@ -225,12 +235,12 @@ class Member(discord.abc.Messageable, _BaseUser):
         self = cls.__new__(cls) # to bypass __init__
 
         self._roles = utils.SnowflakeList(member._roles, is_sorted=True)
-        self.joined_at = member.joined_at
-        self.premium_since = member.premium_since
+        # self.joined_at = member.joined_at
+        # self.premium_since = member.premium_since
         self._client_status = member._client_status.copy()
         self.guild = member.guild
-        self.nick = member.nick
-        self.activities = member.activities
+        # self.nick = member.nick
+        # self.activities = member.activities
         self._state = member._state
 
         # Reference will not be copied unless necessary by PRESENCE_UPDATE
@@ -253,7 +263,7 @@ class Member(discord.abc.Messageable, _BaseUser):
         except KeyError:
             pass
 
-        self.premium_since = utils.parse_time(data.get('premium_since'))
+        # self.premium_since = utils.parse_time(data.get('premium_since'))
         self._update_roles(data)
 
     def _presence_update(self, data, user):

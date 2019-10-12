@@ -404,8 +404,10 @@ class Message:
         author = self.author
         try:
             # Update member reference
-            if author.joined_at is None:
-                author.joined_at = utils.parse_time(member.get('joined_at'))
+            # DXsmiley: ~ I'm not using joined_at anymore, so this is gone.
+            # It might be breaking behaviour though.
+            # if author.joined_at is None:
+            #     author.joined_at = utils.parse_time(member.get('joined_at'))
         except AttributeError:
             # It's a user here
             # TODO: consider adding to cache here

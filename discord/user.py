@@ -36,9 +36,9 @@ from .asset import Asset
 class Profile(namedtuple('Profile', 'flags user mutual_guilds connected_accounts premium_since')):
     __slots__ = ()
 
-    @property
-    def nitro(self):
-        return self.premium_since is not None
+    # @property
+    # def nitro(self):
+    #     return self.premium_since is not None
 
     premium = nitro
 
@@ -74,7 +74,14 @@ class Profile(namedtuple('Profile', 'flags user mutual_guilds connected_accounts
 _BaseUser = discord.abc.User
 
 class BaseUser(_BaseUser):
-    __slots__ = ('name', 'id', 'discriminator', 'avatar', 'bot', '_state')
+    __slots__ = (
+        'name',
+        'id',
+        'discriminator',
+        # 'avatar',
+        'bot',
+        '_state'
+    )
 
     def __init__(self, *, state, data):
         self._state = state
@@ -96,7 +103,7 @@ class BaseUser(_BaseUser):
         self.name = data['username']
         self.id = int(data['id'])
         self.discriminator = data['discriminator']
-        self.avatar = data['avatar']
+        # self.avatar = data['avatar']
         self.bot = data.get('bot', False)
 
     @classmethod
@@ -106,7 +113,7 @@ class BaseUser(_BaseUser):
         self.name = user.name
         self.id = user.id
         self.discriminator = user.discriminator
-        self.avatar = user.avatar
+        # self.avatar = user.avatar
         self.bot = user.bot
         self._state = user._state
 
@@ -116,7 +123,7 @@ class BaseUser(_BaseUser):
         return {
             'name': self.name,
             'id': self.id,
-            'avatar': self.avatar,
+            # 'avatar': self.avatar,
             'discriminator': self.discriminator,
             'bot': self.bot,
         }
@@ -133,9 +140,9 @@ class BaseUser(_BaseUser):
         """
         return self.avatar_url_as(format=None, size=1024)
 
-    def is_avatar_animated(self):
-        """Indicates if the user has an animated avatar."""
-        return bool(self.avatar and self.avatar.startswith('a_'))
+    # def is_avatar_animated(self):
+    #     """Indicates if the user has an animated avatar."""
+    #     return bool(self.avatar and self.avatar.startswith('a_'))
 
     def avatar_url_as(self, *, format=None, static_format='webp', size=1024):
         """Returns an :class:`Asset` for the avatar the user has.

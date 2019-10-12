@@ -123,7 +123,7 @@ class User(metaclass=abc.ABCMeta):
                 return NotImplemented
 
             mro = C.__mro__
-            for attr in ('display_name', 'mention', 'name', 'avatar', 'discriminator', 'bot'):
+            for attr in ('display_name', 'mention', 'name', 'discriminator', 'bot'):
                 for base in mro:
                     if attr in base.__dict__:
                         break
