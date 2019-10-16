@@ -315,34 +315,34 @@ class Member(discord.abc.Messageable, _BaseUser):
         """A helper function that determines if a member is active on a mobile device."""
         return 'mobile' in self._client_status
 
-    @property
-    def colour(self):
-        """:class:`Colour`: A property that returns a colour denoting the rendered colour
-        for the member. If the default colour is the one rendered then an instance
-        of :meth:`Colour.default` is returned.
+    # @property
+    # def colour(self):
+    #     """:class:`Colour`: A property that returns a colour denoting the rendered colour
+    #     for the member. If the default colour is the one rendered then an instance
+    #     of :meth:`Colour.default` is returned.
 
-        There is an alias for this named :meth:`color`.
-        """
+    #     There is an alias for this named :meth:`color`.
+    #     """
 
-        roles = self.roles[1:] # remove @everyone
+    #     roles = self.roles[1:] # remove @everyone
 
-        # highest order of the colour is the one that gets rendered.
-        # if the highest is the default colour then the next one with a colour
-        # is chosen instead
-        for role in reversed(roles):
-            if role.colour.value:
-                return role.colour
-        return Colour.default()
+    #     # highest order of the colour is the one that gets rendered.
+    #     # if the highest is the default colour then the next one with a colour
+    #     # is chosen instead
+    #     for role in reversed(roles):
+    #         if role.colour.value:
+    #             return role.colour
+    #     return Colour.default()
 
-    @property
-    def color(self):
-        """:class:`Colour`: A property that returns a color denoting the rendered color for
-        the member. If the default color is the one rendered then an instance of :meth:`Colour.default`
-        is returned.
+    # @property
+    # def color(self):
+    #     """:class:`Colour`: A property that returns a color denoting the rendered color for
+    #     the member. If the default color is the one rendered then an instance of :meth:`Colour.default`
+    #     is returned.
 
-        There is an alias for this named :meth:`colour`.
-        """
-        return self.colour
+    #     There is an alias for this named :meth:`colour`.
+    #     """
+    #     return self.colour
 
     @property
     def roles(self):

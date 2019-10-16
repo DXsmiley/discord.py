@@ -87,8 +87,18 @@ class Role(Hashable):
         Indicates if the role can be mentioned by users.
     """
 
-    __slots__ = ('id', 'name', '_permissions', '_colour', 'position',
-                 'managed', 'mentionable', 'hoist', 'guild', '_state')
+    __slots__ = (
+        'id',
+        'name',
+        '_permissions',
+        # '_colour',
+        'position',
+        'managed',
+        # 'mentionable',
+        'hoist',
+        'guild',
+        '_state'
+    )
 
     def __init__(self, *, guild, state, data):
         self.guild = guild
@@ -142,10 +152,10 @@ class Role(Hashable):
         self.name = data['name']
         self._permissions = data.get('permissions', 0)
         self.position = data.get('position', 0)
-        self._colour = data.get('color', 0)
+        # self._colour = data.get('color', 0)
         self.hoist = data.get('hoist', False)
         self.managed = data.get('managed', False)
-        self.mentionable = data.get('mentionable', False)
+        # self.mentionable = data.get('mentionable', False)
 
     def is_default(self):
         """Checks if the role is the default role."""
@@ -156,12 +166,12 @@ class Role(Hashable):
         """:class:`Permissions`: Returns the role's permissions."""
         return Permissions(self._permissions)
 
-    @property
-    def colour(self):
-        """:class:`Colour`: Returns the role colour. An alias exists under ``color``."""
-        return Colour(self._colour)
+    # @property
+    # def colour(self):
+    #     """:class:`Colour`: Returns the role colour. An alias exists under ``color``."""
+    #     return Colour(self._colour)
 
-    color = colour
+    # color = colour
 
     @property
     def created_at(self):
