@@ -403,6 +403,7 @@ class Message:
         # ourselves to a more "partial" member object.
         author = self.author
         try:
+            pass
             # Update member reference
             # DXsmiley: ~ I'm not using joined_at anymore, so this is gone.
             # It might be breaking behaviour though.

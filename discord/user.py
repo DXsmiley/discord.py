@@ -36,9 +36,9 @@ from .asset import Asset
 class Profile(namedtuple('Profile', 'flags user mutual_guilds connected_accounts premium_since')):
     __slots__ = ()
 
-    # @property
-    # def nitro(self):
-    #     return self.premium_since is not None
+    @property
+    def nitro(self):
+        return self.premium_since is not None
 
     premium = nitro
 
