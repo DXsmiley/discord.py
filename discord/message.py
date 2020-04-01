@@ -530,12 +530,12 @@ class Message:
         transformations.update(mention_transforms)
         transformations.update(second_mention_transforms)
 
-        if self.guild is not None:
-            role_transforms = {
-                re.escape('<@&%s>' % role.id): '@' + role.name
-                for role in self.role_mentions
-            }
-            transformations.update(role_transforms)
+        # if self.guild is not None:
+        #     role_transforms = {
+        #         re.escape('<@&%s>' % role.id): '@' + role.name
+        #         for role in self.role_mentions
+        #     }
+        #     transformations.update(role_transforms)
 
         def repl(obj):
             return transformations.get(re.escape(obj.group(0)), '')
