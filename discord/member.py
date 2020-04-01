@@ -161,19 +161,30 @@ class Member(discord.abc.Messageable, _BaseUser):
         Nitro boost on the guild, if available. This could be ``None``.
     """
 
-    __slots__ = ('_roles', 'joined_at', 'premium_since', '_client_status', 'activities', 'guild', 'nick', '_user', '_state')
+    __slots__ = (
+        '_roles',
+        # 'joined_at',
+        # 'premium_since',
+        '_client_status',
+        # 'activities',
+        'guild',
+        'nick',
+        '_user',
+        '_state',
+        '__weakref__'
+    )
 
     def __init__(self, *, data, guild, state):
         self._state = state
         self._user = state.store_user(data['user'])
         self.guild = guild
-        self.joined_at = utils.parse_time(data.get('joined_at'))
-        self.premium_since = utils.parse_time(data.get('premium_since'))
+        # self.joined_at = utils.parse_time(data.get('joined_at'))
+        # self.premium_since = utils.parse_time(data.get('premium_since'))
         self._update_roles(data)
         self._client_status = {
             None: 'offline'
         }
-        self.activities = tuple(map(create_activity, data.get('activities', [])))
+        # self.activities = tuple(map(create_activity, data.get('activities', [])))
         self.nick = data.get('nick', None)
 
     def __str__(self):
@@ -181,7 +192,7 @@ class Member(discord.abc.Messageable, _BaseUser):
 
     def __repr__(self):
         return '<Member id={1.id} name={1.name!r} discriminator={1.discriminator!r}' \
-               ' bot={1.bot} nick={0.nick!r} guild={0.guild!r}>'.format(self, self._user)
+               ' bot={1.bot} guild={0.guild!r}>'.format(self, self._user)
 
     def __eq__(self, other):
         return isinstance(other, _BaseUser) and other.id == self.id
@@ -225,12 +236,12 @@ class Member(discord.abc.Messageable, _BaseUser):
         self = cls.__new__(cls) # to bypass __init__
 
         self._roles = utils.SnowflakeList(member._roles, is_sorted=True)
-        self.joined_at = member.joined_at
-        self.premium_since = member.premium_since
+        # self.joined_at = member.joined_at
+        # self.premium_since = member.premium_since
         self._client_status = member._client_status.copy()
         self.guild = member.guild
         self.nick = member.nick
-        self.activities = member.activities
+        # self.activities = member.activities
         self._state = member._state
 
         # Reference will not be copied unless necessary by PRESENCE_UPDATE
@@ -253,11 +264,11 @@ class Member(discord.abc.Messageable, _BaseUser):
         except KeyError:
             pass
 
-        self.premium_since = utils.parse_time(data.get('premium_since'))
+        # self.premium_since = utils.parse_time(data.get('premium_since'))
         self._update_roles(data)
 
     def _presence_update(self, data, user):
-        self.activities = tuple(map(create_activity, data.get('activities', [])))
+        # self.activities = tuple(map(create_activity, data.get('activities', [])))
         self._client_status = {
             key: value
             for key, value in data.get('client_status', {}).items()
@@ -266,12 +277,12 @@ class Member(discord.abc.Messageable, _BaseUser):
 
         if len(user) > 1:
             u = self._user
-            original = (u.name, u.avatar, u.discriminator)
+            original = (u.name, u.discriminator)
             # These keys seem to always be available
-            modified = (user['username'], user['avatar'], user['discriminator'])
+            modified = (user['username'], user['discriminator'])
             if original != modified:
                 to_return = User._copy(self._user)
-                u.name, u.avatar, u.discriminator = modified
+                u.name, u.discriminator = modified
                 # Signal to dispatch on_user_update
                 return to_return, u
         return False
@@ -304,35 +315,6 @@ class Member(discord.abc.Messageable, _BaseUser):
     def is_on_mobile(self):
         """A helper function that determines if a member is active on a mobile device."""
         return 'mobile' in self._client_status
-
-    @property
-    def colour(self):
-        """:class:`Colour`: A property that returns a colour denoting the rendered colour
-        for the member. If the default colour is the one rendered then an instance
-        of :meth:`Colour.default` is returned.
-
-        There is an alias for this named :meth:`color`.
-        """
-
-        roles = self.roles[1:] # remove @everyone
-
-        # highest order of the colour is the one that gets rendered.
-        # if the highest is the default colour then the next one with a colour
-        # is chosen instead
-        for role in reversed(roles):
-            if role.colour.value:
-                return role.colour
-        return Colour.default()
-
-    @property
-    def color(self):
-        """:class:`Colour`: A property that returns a color denoting the rendered color for
-        the member. If the default color is the one rendered then an instance of :meth:`Colour.default`
-        is returned.
-
-        There is an alias for this named :meth:`colour`.
-        """
-        return self.colour
 
     @property
     def roles(self):
@@ -368,18 +350,6 @@ class Member(discord.abc.Messageable, _BaseUser):
         is returned instead.
         """
         return self.nick if self.nick is not None else self.name
-
-    @property
-    def activity(self):
-        """Union[:class:`Game`, :class:`Streaming`, :class:`Spotify`, :class:`Activity`]: Returns the primary
-        activity the user is currently doing. Could be None if no activity is being done.
-
-        .. note::
-
-            A user may have multiple activities, these can be accessed under :attr:`activities`.
-        """
-        if self.activities:
-            return self.activities[0]
 
     def mentioned_in(self, message):
         """Checks if the member is mentioned in the specified message.

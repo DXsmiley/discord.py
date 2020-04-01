@@ -78,8 +78,7 @@ class Asset:
         if static_format not in VALID_STATIC_FORMATS:
             raise InvalidArgument("static_format must be one of {}".format(VALID_STATIC_FORMATS))
 
-        if user.avatar is None:
-            return user.default_avatar_url
+        return user.default_avatar_url
 
         if format is None:
             format = 'gif' if user.is_avatar_animated() else static_format
