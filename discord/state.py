@@ -659,8 +659,8 @@ class ConnectionState:
             old_member = copy.copy(member)
             member._update(data)
             self.dispatch('member_update', old_member, member)
-        else:
-            log.warning('GUILD_MEMBER_UPDATE referencing an unknown member ID: %s. Discarding.', user_id)
+        # else:
+        #     log.warning('GUILD_MEMBER_UPDATE referencing an unknown member ID: %s. Discarding.', user_id)
 
     def parse_guild_emojis_update(self, data):
         guild = self._get_guild(int(data['guild_id']))
@@ -874,8 +874,8 @@ class ConnectionState:
             member, before, after = guild._update_voice_state(data, channel_id)
             if member is not None:
                 self.dispatch('voice_state_update', member, before, after)
-            else:
-                log.warning('VOICE_STATE_UPDATE referencing an unknown member ID: %s. Discarding.', data['user_id'])
+            # else:
+            #     log.warning('VOICE_STATE_UPDATE referencing an unknown member ID: %s. Discarding.', data['user_id'])
         else:
             # in here we're either at private or group calls
             call = self._calls.get(channel_id)
